@@ -20,6 +20,8 @@ export class ListUsersComponent implements OnInit {
 
   userSelected(user: User): void {
     this.eventBusService.emit(new UserSelected("USER_DETAIL", user));
-    this.eventBusService.emit(new UserSelected("USER_PANEL", user.repos_url));
+    this.eventBusService.emit(
+      new UserSelected("USER_PANEL", { url: user.repos_url, id: user.id })
+    );
   }
 }

@@ -3,6 +3,8 @@
 
   .column {
     flex-direction: column;
+    max-height: 80vh;
+    overflow-y: auto;
     p {
       margin: 5px;
     }

@@ -6,6 +6,7 @@ import { UserEvent } from "../users-event";
 import { UserService } from "src/app/services/user.service";
 import { Observable, Subscription } from "rxjs";
 import { Repos } from "src/app/models/repos";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-user-rep",
@@ -23,8 +24,14 @@ export class UserRepComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subSink = this.eventBusService.on(
       new UsersChannel("USER_PANEL"),
-      (repos_url: UserEvent) => {
-        this.repos = this.userService.getRepos(repos_url.value);
+      (userEvent: UserEvent) => {
+        this.repos = this.userService.getRepos(userEvent.value.url).pipe(
+          map((repos: Repos[]) => {
+            return repos.filter(repo => {
+              return repo.owner.id === userEvent.value.id;
+            });
+          })
+        );
       }
     );
   }
