@@ -1,0 +1,6 @@
+<div *ngIf="!!repos">
+  <div *ngFor="let rep of repos | async" class="user-rep-container">
+    <p>{{rep.full_name}}</p>
+    <a href="{{rep.html_url}}" target="_blank">{{rep.html_url}}</a>
+  </div>
+</div>

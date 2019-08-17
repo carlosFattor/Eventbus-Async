@@ -1,0 +1,9 @@
+<div *ngIf="!!user; else notFound" class="user-detail-content">
+  <div class="column">
+    <img class="user-avatar" src="{{user.avatar_url}}" alt="user.login">
+    <p>{{user.login}}</p>
+  </div>
+</div>
+<ng-template #notFound>
+  <p>Select one user</p>
+</ng-template>

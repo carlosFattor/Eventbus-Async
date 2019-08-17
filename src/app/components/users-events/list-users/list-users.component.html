@@ -1,0 +1,8 @@
+<div *ngIf="!!users" class="list-users-content">
+  <section class="column">
+    <div *ngFor="let user of users.value" class="user-list-content" (click)="userSelected(user)">
+      <img class="user-avatar" src="{{user.avatar_url}}" alt="user.login">
+      <p>{{user.login}}</p>
+    </div>
+  </section>
+</div>

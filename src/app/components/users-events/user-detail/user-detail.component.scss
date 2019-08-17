@@ -1,0 +1,18 @@
+.user-detail-content {
+  display: flex;
+  margin: 25px;
+  .column {
+    flex-direction: column;
+    text-align: center;
+    p {
+      margin: 5px;
+    }
+    .user-avatar {
+      background: #29363d;
+      margin: 5px;
+      border: 1px #0e1214;
+      border-radius: 10px;
+      width: 250px;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.list-users-content {
+  display: flex;
+
+  .column {
+    flex-direction: column;
+    p {
+      margin: 5px;
+    }
+
+    .user-list-content {
+      text-align: center;
+      border: 1px solid #29363d;
+      margin: 10px;
+      border-radius: 10px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .user-avatar {
+    background: #29363d;
+    margin: 5px;
+    border: 1px #0e1214;
+    border-radius: 10px;
+    width: 100px;
+  }
+}
