@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from 'rxjs/internal/Subscription';
 import { User } from "src/app/models/user";
 import { EventBusService } from "src/app/services/event-bus.service";
-import { UsersChannel } from "../users-channel";
-import { UserEvent } from "../users-event";
+import { UserEventsEnum } from 'src/app/services/user-events.enum';
+import { UsersChannelListening } from '../users-channel';
 
 @Component({
   selector: "app-user-detail",
@@ -16,12 +16,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   constructor(private eventBusService: EventBusService) { }
 
   ngOnInit() {
-    this.subSink = this.eventBusService.on(
-      new UsersChannel("USER_DETAIL"),
-      (user: UserEvent) => {
-        this.user = user.value;
-      }
-    );
+    this.subSink = this.eventBusService
+      .on<User>(new UsersChannelListening(UserEventsEnum.USER_DETAIL), (value: User) => {
+        this.user = value;
+      });
   }
 
   ngOnDestroy(): void {

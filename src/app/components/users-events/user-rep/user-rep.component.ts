@@ -1,12 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { EventBusService } from "src/app/services/event-bus.service";
-import { UsersChannel } from "../users-channel";
-import { User } from "src/app/models/user";
-import { UserEvent } from "../users-event";
-import { UserService } from "src/app/services/user.service";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
-import { Repos } from "src/app/models/repos";
 import { map } from "rxjs/operators";
+import { Repos } from "src/app/models/repos";
+import { EventBusService } from "src/app/services/event-bus.service";
+import { UserService } from "src/app/services/user.service";
+import { UsersChannelListening } from "../users-channel";
 
 @Component({
   selector: "app-user-rep",
@@ -19,21 +17,19 @@ export class UserRepComponent implements OnInit, OnDestroy {
   constructor(
     private eventBusService: EventBusService,
     private userService: UserService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.subSink = this.eventBusService.on(
-      new UsersChannel("USER_PANEL"),
-      (userEvent: UserEvent) => {
-        this.repos = this.userService.getRepos(userEvent.value.url).pipe(
+    this.subSink = this.eventBusService
+      .on<{ url: string, id: string }>(new UsersChannelListening("USER_PANEL"), userEvent => {
+        this.repos = this.userService.getRepos(userEvent.url).pipe(
           map((repos: Repos[]) => {
             return repos.filter(repo => {
-              return repo.owner.id === userEvent.value.id;
+              return repo.owner.id === userEvent.id;
             });
           })
         );
-      }
-    );
+      });
   }
   ngOnDestroy(): void {
     this.subSink.unsubscribe();

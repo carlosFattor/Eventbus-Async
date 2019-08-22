@@ -10,20 +10,16 @@ import { EmitEvent } from "./emit-event";
 export class EventBusService {
   private subject = new Subject<any>();
 
-  on(event: CustomEvent, data: any): Subscription {
+  on<T>(event: CustomEvent, action: (value: T) => void): Subscription {
     return this.subject
       .pipe(
-        filter((e: CustomEvent) => {
-          return e.channel === event.channel;
-        }),
-        map((e: CustomEvent) => {
-          return e;
-        })
+        filter((e: EmitEvent<T>) => e.channel === event.channel),
+        map((e: EmitEvent<T>) => e)
       )
-      .subscribe(data);
+      .subscribe((e: EmitEvent<T>) => action(e.value));
   }
 
-  emit(event: EmitEvent): void {
+  emit<T>(event: EmitEvent<T>): void {
     this.subject.next(event);
   }
 }

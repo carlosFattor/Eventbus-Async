@@ -1,15 +1,11 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
-import { UserService } from "src/app/services/user.service";
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  switchMap
-} from "rxjs/operators";
-import { merge, fromEvent, Observable, concat } from "rxjs";
-import { EventBusService } from "src/app/services/event-bus.service";
-import { UserEvent } from "../users-event";
+import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
+import { concat, fromEvent, Observable } from "rxjs";
+import { debounceTime, distinctUntilChanged, map, switchMap } from "rxjs/operators";
 import { User } from "src/app/models/user";
+import { EventBusService } from "src/app/services/event-bus.service";
+import { UserEventsEnum } from 'src/app/services/user-events.enum';
+import { UserService } from "src/app/services/user.service";
+import { UserEventEmitter } from "../users-event";
 @Component({
   selector: "app-search",
   templateUrl: "./search.component.html",
@@ -22,7 +18,7 @@ export class SearchComponent implements AfterViewInit {
   constructor(
     private userService: UserService,
     private eventBusService: EventBusService
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     const searchUser$ = fromEvent<any>(this.input.nativeElement, "keyup").pipe(
@@ -33,7 +29,7 @@ export class SearchComponent implements AfterViewInit {
     );
     const initialUsers$ = this.loadUsers("");
     concat(initialUsers$, searchUser$).subscribe(data => {
-      this.eventBusService.emit(new UserEvent("USERS_FOUNDED", data));
+      this.eventBusService.emit<User[]>(new UserEventEmitter(UserEventsEnum.USERS_FOUNDED, data));
     });
   }
   loadUsers(search = ""): Observable<User[]> {

@@ -1,0 +1,5 @@
+export enum UserEventsEnum {
+  USER_DETAIL = 'USER_DETAIL',
+  USERS_FOUNDED = 'USERS_FOUNDED',
+  USER_PANEL = 'USER_PANEL'
+}

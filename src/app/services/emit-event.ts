@@ -1,3 +1,3 @@
-export abstract class EmitEvent {
-  constructor(public channel: any, public value?: any) {}
+export abstract class EmitEvent<T> {
+  constructor(public channel: string, public value?: T) { }
 }
