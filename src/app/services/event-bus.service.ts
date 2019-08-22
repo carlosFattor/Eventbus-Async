@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject, Subscription } from "rxjs";
-import { filter, map } from "rxjs/operators";
+import { catchError, filter, map } from "rxjs/operators";
 import { CustomEvent } from "./custom-event.interface";
 import { EmitEvent } from "./emit-event";
 
@@ -14,7 +14,8 @@ export class EventBusService {
     return this.subject
       .pipe(
         filter((e: EmitEvent<T>) => e.channel === event.channel),
-        map((e: EmitEvent<T>) => e)
+        map((e: EmitEvent<T>) => e),
+        catchError(error => { throw new Error(`There are something wrong with event-bus = ${error.message}`) })
       )
       .subscribe((e: EmitEvent<T>) => action(e.value));
   }
